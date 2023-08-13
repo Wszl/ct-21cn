@@ -171,4 +171,15 @@ public class ServiceRequestsTest {
         String ret = this.serviceRequests.decryptByRSA(Hex.decodeHex(dataStr));
         System.out.println(ret);
     }
+
+
+    @Test
+    public void testInitAuth() throws InterruptedException {
+        String accessToken = System.getenv("ACCESS_TOKEN");
+        String refreshToken = System.getenv("REFRESH_TOKEN");
+        Integer refreshExpiresIn = Integer.valueOf(System.getenv("REFRESH_TOEKN_EXPIREIN"));
+        Integer expiresIn = Integer.valueOf(System.getenv("ACCESS_TOKEN_EXPIREIN"));
+        this.serviceRequests.initAuth(accessToken, refreshToken, refreshExpiresIn, expiresIn);
+        Thread.sleep(1000* 1000);
+    }
 }

@@ -187,13 +187,16 @@ public class ServiceRequests {
         this.refreshAccessTokenExpireIn = Instant.now().plusSeconds(refreshExpiresIn);
         this.accessTokenExpireInSec = expiresIn;
         this.refreshAccessTokenExpireInSec = refreshExpiresIn;
+        if (expiresIn <= 5000) {
+            expiresIn = 5001;
+        }
         accessToeknRefreshTimer.purge();
         accessToeknRefreshTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 refreshAccessToken();
             }
-        }, (expiresIn - 10*60) * 1000);
+        }, expiresIn - 5 * 1000, 5 * 24 * 60 * 60 * 1000);
     }
 
     public void refreshAccessToken() {
