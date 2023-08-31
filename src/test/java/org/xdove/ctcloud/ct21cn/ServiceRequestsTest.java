@@ -36,7 +36,7 @@ public class ServiceRequestsTest {
                 System.getenv("RSA_PUBLIC_KEY"),
                 "auth_code"
                 );
-        this.serviceRequests = new ServiceRequests(HttpClients.createDefault(), config);
+        this.serviceRequests = new ServiceRequests(config);
 //        this.serviceRequests.initAuth(System.getenv("authCode"));
         //mock
         this.serviceRequests.setAccessToken(System.getenv("ACCESS_TOKEN"));

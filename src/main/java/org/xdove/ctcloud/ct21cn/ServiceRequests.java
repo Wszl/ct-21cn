@@ -116,24 +116,23 @@ public class ServiceRequests {
 
 
     public ServiceRequests(Config config) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, InvalidKeySpecException {
-        this(HttpClientBuilder.create().build(), config);
+        this(HttpClientBuilder.create().build(), RequestConfig.custom()
+                .setConnectionRequestTimeout(10000)
+                .setSocketTimeout(2000)
+                .setConnectTimeout(5000)
+                .build(),config);
     }
 
-    public ServiceRequests(HttpClient client, Config config) throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException {
+    public ServiceRequests(HttpClient client, RequestConfig requestConfig, Config config) throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException {
         this.client = client;
         this.config = config;
-        this.requestConfig = RequestConfig.custom()
-                .setConnectionRequestTimeout(10000)
-                .setSocketTimeout(1000)
-                .setConnectTimeout(5000)
-                .build();
         if (Objects.nonNull(config.getUriPrefix())) {
             this.urlPrefix = config.getUriPrefix();
         } else {
             this.urlPrefix = "";
         }
         this.accessToeknRefreshTimer = new Timer(true);
-
+        this.requestConfig = requestConfig;
         KeyFactory keyFactory = KeyFactory.getInstance(config.getRsaAlgorithmName());
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(config.getRSAPrivateKey()));
         this.rsaPrivateKey =  (RSAPrivateKey) keyFactory.generatePrivate(pkcs8KeySpec);
