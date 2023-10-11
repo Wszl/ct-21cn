@@ -180,7 +180,7 @@ public class ServiceRequests {
         }
     }
 
-    private void scheduleRefreshToken(String accessToken, String refreshToken, Integer refreshExpiresIn, Integer expiresIn) {
+    public Timer scheduleRefreshToken(String accessToken, String refreshToken, Integer refreshExpiresIn, Integer expiresIn) {
         this.accessToken = accessToken;
         this.refreshAccessToken = refreshToken;
         this.refreshAccessTokenExpireIn = Instant.now().plusSeconds(refreshExpiresIn);
@@ -189,13 +189,16 @@ public class ServiceRequests {
         if (expiresIn <= 5000) {
             expiresIn = 5001;
         }
+        Instant startDate = Instant.now().plusSeconds(5 * 24 * 60 * 60);
+        log.info("scheduleRefreshToken in {}", startDate.toEpochMilli());
         accessToeknRefreshTimer.purge();
         accessToeknRefreshTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 refreshAccessToken();
             }
-        }, expiresIn - 5 * 1000, 5 * 24 * 60 * 60 * 1000);
+        }, new Date(startDate.toEpochMilli()));
+        return accessToeknRefreshTimer;
     }
 
     public void refreshAccessToken() {
