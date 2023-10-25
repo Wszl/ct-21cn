@@ -187,9 +187,9 @@ public class ServiceRequests {
         this.accessTokenExpireInSec = expiresIn;
         this.refreshAccessTokenExpireInSec = refreshExpiresIn;
         if (expiresIn <= 5000) {
-            expiresIn = 5001;
+            accessTokenExpireInSec = 5001;
         }
-        Instant startDate = Instant.now().plusSeconds(5 * 24 * 60 * 60);
+        Instant startDate = Instant.now().plusSeconds(accessTokenExpireInSec - 100);
         log.info("scheduleRefreshToken in {}", startDate.toEpochMilli());
         accessToeknRefreshTimer.purge();
         accessToeknRefreshTimer.schedule(new TimerTask() {
