@@ -191,7 +191,12 @@ public class ServiceRequests {
         }
         Instant startDate = Instant.now().plusSeconds(accessTokenExpireInSec - 100);
         log.info("scheduleRefreshToken in {}", startDate.toEpochMilli());
-        accessToeknRefreshTimer.purge();
+        if (Objects.nonNull(accessToeknRefreshTimer)) {
+            accessToeknRefreshTimer.cancel();
+            int count = accessToeknRefreshTimer.purge();
+            log.info("clean old task {}", count);
+        }
+        this.accessToeknRefreshTimer = new Timer();
         accessToeknRefreshTimer.schedule(new TimerTask() {
             @Override
             public void run() {

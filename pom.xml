@@ -6,7 +6,7 @@
 
     <groupId>org.xdove.thridpart</groupId>
     <artifactId>ct-21cn-video</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
